@@ -11,4 +11,4 @@ RUN uv sync --frozen --no-cache
 COPY app ./app
 
 # Run the application on the same port exposed by docker-compose.
-CMD ["/app/.venv/bin/fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/.venv/bin/fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
