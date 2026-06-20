@@ -1,14 +1,24 @@
-FROM python:3.14-slim
+FROM python:3.11-slim
 
-# Install uv.
+# Install system dependencies for build requirements
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Copy dependency manifests and install packages first for better caching.
-COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-cache
+WORKDIR /workspace
 
-# Copy the application code.
+# Copy configuration files
+COPY pyproject.toml ./
+
+# Install dependencies using uv into the system site-packages for container simplicity
+RUN uv pip install --system -r pyproject.toml
+
+# Copy application source code
 COPY app ./app
 
-# Run the application on the same port exposed by docker-compose.
-CMD ["/.venv/bin/fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+# Export PYTHONPATH to locate 'app' module
+ENV PYTHONPATH=/workspace
