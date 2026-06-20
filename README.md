@@ -1,6 +1,6 @@
 # AI-Powered Transaction Processing Pipeline
 
-An asynchronous backend API to process, clean, and analyze raw financial transaction data. It uses FastAPI for the API layer, PostgreSQL for storing structured jobs and transaction records, Redis as a message broker/backend, Celery for background queue processing, and Gemini 1.5 Flash for transaction classification and narrative summary reports.
+An asynchronous backend API to process, clean, and analyze raw financial transaction data. It uses FastAPI for the API layer, PostgreSQL for storing structured jobs and transaction records, Redis as a message broker/backend, Celery for background queue processing, and Gemini 3.5 Flash for transaction classification and narrative summary reports.
 
 ---
 
@@ -9,7 +9,7 @@ An asynchronous backend API to process, clean, and analyze raw financial transac
 - **Uv:** Astral's extremely fast Python package and environment installer.
 - **PostgreSQL 16:** Relational database for storing Job metadata, Cleaned Transactions, and Job Summaries.
 - **Celery + Redis:** Asynchronous task queue and broker for background execution.
-- **Gemini 1.5 Flash:** LLM integration via `google-generativeai` SDK for category classification and analytical narrative synthesis.
+- **Gemini 3.5 Flash:** LLM integration via `google-generativeai` SDK for category classification and analytical narrative synthesis.
 - **Docker & Docker Compose:** Containerization for all services, enabling one-command setup.
 
 ---
@@ -59,7 +59,7 @@ When a job is uploaded:
 2. **Anomaly Detection:** 
    - **Statistical Outliers:** Flags transactions where the amount exceeds $3\times$ the account's median spend.
    - **Domain Anomaly:** Flags transactions processed in `USD` containing domestic-only merchant brands (`Swiggy`, `Ola`, `IRCTC`).
-3. **LLM Classification:** Selects transactions that lack categories and calls Gemini 1.5 Flash in batches of 20 to map them into: `Food`, `Shopping`, `Travel`, `Transport`, `Utilities`, `Cash Withdrawal`, `Entertainment`, or `Other`.
+3. **LLM Classification:** Selects transactions that lack categories and calls Gemini 3.5 Flash in batches of 20 to map them into: `Food`, `Shopping`, `Travel`, `Transport`, `Utilities`, `Cash Withdrawal`, `Entertainment`, or `Other`.
 4. **LLM Summary Report:** Synthesizes metrics (spend sum by currency, top merchants, anomaly count) alongside transaction records, calling Gemini to construct a 2-3 sentence narrative review and risk evaluation (`low`, `medium`, `high`).
 5. **Backoff Retry & Fallback:** All LLM calls employ exponential backoff retry logic (up to 3 times). If the Gemini API is unreachable, has exhausted its quota, or is missing the `GEMINI_API_KEY`, the task falls back to local heuristic classifiers and mathematical summaries, marking the batch as `llm_failed = true` without crashing the processing job.
 
