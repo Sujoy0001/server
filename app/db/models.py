@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import Column, String, Integer, Float, Boolean, DateTime, ForeignKey, Text, JSON, func
 from sqlalchemy.orm import relationship
-from server.app.db.postgressdb import Base
+from app.db.postgressdb import Base
 
 class Job(Base):
     __tablename__ = "jobs"

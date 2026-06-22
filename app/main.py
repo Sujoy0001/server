@@ -4,10 +4,10 @@ from fastapi import FastAPI, UploadFile, File, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
-from server.app.db.postgressdb import engine, Base, get_db
-from server.app.db.models import Job, Transaction, JobSummary
-from server.app.schemas import schemas
-from server.app.tasks.pipeline_tasks import process_transaction_file
+from app.db.postgressdb import engine, Base, get_db
+from app.db.models import Job, Transaction, JobSummary
+from app.schemas import schemas
+from app.tasks.pipeline_tasks import process_transaction_file
 
 # Initialize DB tables on startup
 @asynccontextmanager

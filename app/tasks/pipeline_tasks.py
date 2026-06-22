@@ -4,12 +4,12 @@ from datetime import datetime
 import pandas as pd
 from sqlalchemy import func
 
-from server.app.tasks.celery_app import celery_app
-from server.app.db.postgressdb import SessionLocal
-from server.app.db.models import Job, Transaction, JobSummary
-from server.app.services.cleaning import clean_csv
-from server.app.services.anomalies import detect_anomalies
-from server.app.services.llm_service import classify_transactions_batch, generate_narrative_summary
+from app.tasks.celery_app import celery_app
+from app.db.postgressdb import SessionLocal
+from app.db.models import Job, Transaction, JobSummary
+from app.services.cleaning import clean_csv
+from app.services.anomalies import detect_anomalies
+from app.services.llm_service import classify_transactions_batch, generate_narrative_summary
 
 logger = logging.getLogger(__name__)
 
